@@ -16,6 +16,10 @@
 #define FORBIDDEN 403
 #define NOTFOUND  404
 
+#ifndef SIGCLD
+# define SIGCLD SIGCHLD
+#endif
+
 struct {
 	char *ext;
 	char *filetype;
