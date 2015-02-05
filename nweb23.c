@@ -18,7 +18,7 @@
 #define NOTFOUND  404
 
 #ifndef SIGCLD
-# define SIGCLD SIGCHLD
+    #define SIGCLD SIGCHLD
 #endif
 
 struct {
