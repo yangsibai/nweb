@@ -176,7 +176,7 @@ int main(int argc, char **argv) {
         exit(4);
     }
     (void) printf("nweb start in %s at %s", argv[2], argv[1]);
-    /* Become deamon + unstopable and no zombies children (= no wait()) */
+    /* Become daemon + unstoppable and no zombies children (= no wait()) */
     if (fork() != 0)
         return 0; /* parent returns OK to shell */
     (void) signal(SIGCLD, SIG_IGN); /* ignore child death */
