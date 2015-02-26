@@ -175,6 +175,7 @@ int main(int argc, char **argv) {
         (void) printf("ERROR: Can't Change to directory %s\n", argv[2]);
         exit(4);
     }
+    (void) printf("nweb start in %s at %s", argv[2], argv[1]);
     /* Become deamon + unstopable and no zombies children (= no wait()) */
     if (fork() != 0)
         return 0; /* parent returns OK to shell */
