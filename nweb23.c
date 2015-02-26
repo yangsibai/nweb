@@ -17,6 +17,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <Python/Python.h>
 
 #endif
 
@@ -142,12 +143,7 @@ void web(int fd, int hit) {
     exit(1);
 }
 
-int main(int argc, char **argv) {
-    int i, port, pid, listenfd, socketfd, hit;
-    socklen_t length;
-    static struct sockaddr_in cli_addr; /* static = initialised to zeros */
-    static struct sockaddr_in serv_addr; /* static = initialised to zeros */
-
+void verifyArgs(int argc, char **argv){
     if (argc < 3 || argc > 3 || !strcmp(argv[1], "-?")) {
         (void) printf("hint: nweb Port-Number Top-Directory\t\tversion %d\n\n"
                 "\tnweb is a small and very safe mini web server\n"
@@ -156,7 +152,7 @@ int main(int argc, char **argv) {
                 "\tThere is no fancy features = safe and secure.\n\n"
                 "\tExample: nweb 8181 /home/nwebdir &\n\n"
                 "\tOnly Supports:", VERSION);
-        for (i = 0; extensions[i].ext != 0; i++)
+        for (int i = 0; extensions[i].ext != 0; i++)
             (void) printf(" %s", extensions[i].ext);
 
         (void) printf("\n\tNot Supported: URLs including \"..\", Java, Javascript, CGI\n"
@@ -175,6 +171,19 @@ int main(int argc, char **argv) {
         (void) printf("ERROR: Can't Change to directory %s\n", argv[2]);
         exit(4);
     }
+    int port = atoi(argv[1]);
+    if (port < 0 || port > 60000){
+        printf("Invalid port number (try 1->60000)");
+        logger(ERROR, "Invalid port number (try 1->60000)", argv[1], 0);
+    }
+}
+
+int main(int argc, char **argv) {
+    verifyArgs(argc, argv);
+    int i, port, pid, listenfd, socketfd, hit;
+    socklen_t length;
+    static struct sockaddr_in cli_addr; /* static = initialised to zeros */
+    static struct sockaddr_in serv_addr; /* static = initialised to zeros */
     (void) printf("nweb start in %s at %s", argv[2], argv[1]);
     /* Become daemon + unstoppable and no zombies children (= no wait()) */
     if (fork() != 0)
@@ -189,8 +198,6 @@ int main(int argc, char **argv) {
     if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         logger(ERROR, "system call", "socket", 0);
     port = atoi(argv[1]);
-    if (port < 0 || port > 60000)
-        logger(ERROR, "Invalid port number (try 1->60000)", argv[1], 0);
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     serv_addr.sin_port = htons(port);
