@@ -8,14 +8,17 @@
 #include <sys/types.h>
 
 #ifdef _WIN32
+
 #include <winsock2.h>
 #include <windows.h>
+
 #else
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#endif
 
+#endif
 
 #define VERSION 23
 #define BUFSIZE 8096
@@ -24,8 +27,9 @@
 #define FORBIDDEN 403
 #define NOTFOUND  404
 
+
 #ifndef SIGCLD
-    #define SIGCLD SIGCHLD
+#define SIGCLD SIGCHLD //for mac os x
 #endif
 
 struct {
