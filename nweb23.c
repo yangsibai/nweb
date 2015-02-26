@@ -184,7 +184,6 @@ int main(int argc, char **argv) {
     socklen_t length;
     static struct sockaddr_in cli_addr; /* static = initialised to zeros */
     static struct sockaddr_in serv_addr; /* static = initialised to zeros */
-    (void) printf("nweb start in %s at %s", argv[2], argv[1]);
     /* Become daemon + unstoppable and no zombies children (= no wait()) */
     if (fork() != 0)
         return 0; /* parent returns OK to shell */
